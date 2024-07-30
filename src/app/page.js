@@ -9,7 +9,7 @@ import {
   TiktokIcon,
   TwitterXIcon,
 } from "./icons"; // Ajusta la ruta según corresponda
-import Image from "next/image";
+import Image from 'next/image'
 import Link from "next/link";
 
 const iconComponents = {
@@ -77,12 +77,12 @@ export default function Page() {
                 <h2>TORNEO DE OPENINGS</h2>
                 <div className={styles.contactImage}>
                   <Image
-                    src={animeImages.img_folderAnime}
-                    alt="Contact me"
+                    src={"/image/img_battleSong.png"}
+                    alt="Battle Song"
                     width={500}
                     height={200}
                   />
-                </div>{" "}
+                </div>
               </Link>
             </section>
           </div>

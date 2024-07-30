@@ -44,8 +44,8 @@
     ]
   },
   "animeImages": {
-    "img_folderAnime": "/image/img_folderAnime.png",
-    "img_battleSong": "/image/img_battleSong.png"
+    "img_folderAnime": "/public/image/img_folderAnime.png",
+    "img_battleSong": "/public/image/img_battleSong.png"
   },
   "links": {
     "battleSong": "https://songbattle.io/"

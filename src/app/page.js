@@ -65,7 +65,7 @@ export default function Page() {
                   <Image
                     src={animeImages.img_folderAnime}
                     alt="Anime Image"
-                    width={500}
+                    width={100}
                     height={250}
                   />
                 </div>
@@ -79,7 +79,7 @@ export default function Page() {
                   <Image
                     src={animeImages.img_battleSong}
                     alt="Battle Song"
-                    width={500}
+                    width={100}
                     height={200}
                   />
                 </div>

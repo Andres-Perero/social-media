@@ -1,6 +1,8 @@
+"use client";
+
 import Head from "next/head";
 import styles from "./page.module.css";
-import data from "./data.json"; // Importa los datos desde el archivo JSON
+import data from "./data.json";
 import {
   InstagramIcon,
   OkruIcon,
@@ -8,9 +10,10 @@ import {
   YoutubeIcon,
   TiktokIcon,
   TwitterXIcon,
-} from "./icons"; // Ajusta la ruta según corresponda
-import Image from 'next/image'
+} from "./icons";
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const iconComponents = {
   InstagramIcon,
@@ -23,6 +26,62 @@ const iconComponents = {
 
 export default function Page() {
   const { description, socials, schedule, animeImages, links } = data;
+
+  // Añadir el efecto de movimiento del mouse
+  useEffect(() => {
+    const elements = document.querySelectorAll(`.${styles.animeImage}, .${styles.contactImage}`);
+
+    const handleMouseMove = (event) => {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const rotateX = (y / rect.height - 0.5) * 40;
+      const rotateY = (x / rect.width - 0.5) * -40;
+
+      event.currentTarget.style.transform = `scale(1.1) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    };
+
+    const handleMouseLeave = (event) => {
+      event.currentTarget.style.transform = `scale(1) rotateX(0) rotateY(0)`;
+    };
+
+    elements.forEach((element) => {
+      element.addEventListener("mousemove", handleMouseMove);
+      element.addEventListener("mouseleave", handleMouseLeave);
+    });
+
+    return () => {
+      elements.forEach((element) => {
+        element.removeEventListener("mousemove", handleMouseMove);
+        element.removeEventListener("mouseleave", handleMouseLeave);
+      });
+    };
+  }, []);
+
+  // Resaltar el día actual en el cronograma
+  useEffect(() => {
+    const daysOfWeekInSpanish = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const tableHeaderCells = document.querySelectorAll(`.${styles.scheduleTable} th`);
+    const tableBodyCells = document.querySelectorAll(`.${styles.scheduleTable} td`);
+
+    // Resaltar en el encabezado
+    tableHeaderCells.forEach((cell) => {
+      if (cell.textContent === daysOfWeekInSpanish[dayOfWeek]) {
+        cell.classList.add(styles.currentDay);
+      }
+    });
+
+    // Resaltar en el cuerpo de la tabla
+    tableBodyCells.forEach((cell, index) => {
+      const cellIndex = index % 7;
+      if (tableHeaderCells[cellIndex].textContent === daysOfWeekInSpanish[dayOfWeek]) {
+        cell.classList.add(styles.currentDay);
+      }
+    });
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -44,11 +103,7 @@ export default function Page() {
             {socials.map((social) => {
               const IconComponent = iconComponents[social.icon];
               return (
-                <a
-                  key={social.name}
-                  href={social.link}
-                  data-tooltip={social.name}
-                >
+                <a key={social.name} href={social.link} data-tooltip={social.name}>
                   <IconComponent />
                 </a>
               );
@@ -65,26 +120,25 @@ export default function Page() {
                   <Image
                     src={animeImages.img_folderAnime}
                     alt="Anime Image"
-                    width={300}
-                    height={150}
+                    width={500}
+                    height={200}
                   />
                 </div>
               </section>
             </Link>
-
-            <section className={styles.contact}>
-              <Link href={"/vistos"} >
+            <Link href={links.battleSong}>
+              <section className={styles.contact}>
                 <h2>TORNEO DE OPENINGS</h2>
                 <div className={styles.contactImage}>
                   <Image
                     src={animeImages.img_battleSong}
                     alt="Battle Song"
-                    width={300}
-                    height={150}
+                    width={500}
+                    height={200}
                   />
                 </div>
-              </Link>
-            </section>
+              </section>
+            </Link>
           </div>
         </div>
       </main>

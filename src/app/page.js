@@ -73,7 +73,7 @@ export default function Page() {
             </Link>
 
             <section className={styles.contact}>
-              <a href={links.battleSong} target="_blank">
+              <Link href={links.battleSong} target="_blank">
                 <h2>TORNEO DE OPENINGS</h2>
                 <div className={styles.contactImage}>
                   <Image
@@ -83,7 +83,7 @@ export default function Page() {
                     height={200}
                   />
                 </div>{" "}
-              </a>
+              </Link>
             </section>
           </div>
         </div>

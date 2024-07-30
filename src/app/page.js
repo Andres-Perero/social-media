@@ -73,7 +73,7 @@ export default function Page() {
             </Link>
 
             <section className={styles.contact}>
-              <Link href={links.battleSong} target="_blank">
+              <Link href={"/vistos"} >
                 <h2>TORNEO DE OPENINGS</h2>
                 <div className={styles.contactImage}>
                   <Image

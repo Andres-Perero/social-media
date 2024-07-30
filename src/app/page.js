@@ -1,95 +1,119 @@
-import Image from "next/image";
+import Head from "next/head";
 import styles from "./page.module.css";
+import data from "./data.json"; // Importa los datos desde el archivo JSON
+import {
+  InstagramIcon,
+  OkruIcon,
+  TwitchIcon,
+  YoutubeIcon,
+  TiktokIcon,
+  TwitterXIcon,
+} from "./icons"; // Ajusta la ruta según corresponda
+import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+const iconComponents = {
+  InstagramIcon,
+  OkruIcon,
+  TwitchIcon,
+  YoutubeIcon,
+  TiktokIcon,
+  TwitterXIcon,
+};
+
+export default function Page() {
+  const { description, socials, schedule, animeImages, links } = data;
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className={styles.container}>
+      <Head>
+        <title>WebPage</title>
+        <meta name="description" content="Horario de Animes" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main className={styles.main}>
+        <div className={styles.column}>
+          <section className={styles.description}>
+            <h2>{description.name}</h2>
+            <h3>{description.title}</h3>
+            <p>{description.bio}</p>
+          </section>
+
+          <div className={styles.socials}>
+            {socials.map((social) => {
+              const IconComponent = iconComponents[social.icon];
+              return (
+                <a
+                  key={social.name}
+                  href={social.link}
+                  data-tooltip={social.name}
+                >
+                  <IconComponent />
+                </a>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <div className={styles.column}>
+          <div className={styles.animeContactContainer}>
+            <Link href={"/vistos"}>
+              <section className={styles.anime}>
+                <h2>ANIME VISTOS</h2>
+                <div className={styles.animeImage}>
+                  <Image
+                    src={animeImages.img_folderAnime}
+                    alt="Anime Image"
+                    width={500}
+                    height={250}
+                  />
+                </div>
+              </section>
+            </Link>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+            <section className={styles.contact}>
+              <a href={links.battleSong} target="_blank">
+                <h2>TORNEO DE OPENINGS</h2>
+                <div className={styles.contactImage}>
+                  <Image
+                    src={animeImages.img_battleSong}
+                    alt="Contact me"
+                    width={500}
+                    height={200}
+                  />
+                </div>{" "}
+              </a>
+            </section>
+          </div>
+        </div>
+      </main>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+      <section className={styles.schedule}>
+        <h2>HORARIO - CRONOGRAMA</h2>
+        <table className={styles.scheduleTable}>
+          <thead>
+            <tr>
+              {schedule.header.map((day) => (
+                <th key={day}>{day}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {schedule.rows.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {row.map((cell, cellIndex) => (
+                  <td key={cellIndex}>{cell}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      <footer className={styles.footer}>
+        <p>&copy; 2024 {description.name}</p>
+      </footer>
+    </div>
   );
 }

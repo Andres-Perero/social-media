@@ -77,7 +77,7 @@ export default function Page() {
                 <h2>TORNEO DE OPENINGS</h2>
                 <div className={styles.contactImage}>
                   <Image
-                    src={animeImages.img_battleSong}
+                    src={animeImages.img_folderAnime}
                     alt="Contact me"
                     width={500}
                     height={200}

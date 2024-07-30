@@ -44,11 +44,10 @@
     ]
   },
   "animeImages": {
-    "img_battleSong": "/image/img_battleSong.jpg",
-    "img_folderAnime": "/image/img_folderAnime.png"
+    "img_folderAnime": "/image/img_folderAnime.png",
+    "img_battleSong": "/image/img_battleSong.jpg"
   },
   "links": {
     "battleSong": "https://songbattle.io/"
-   
   }
 }

@@ -1,27 +1,34 @@
-//googleDrive.js
+// googleDrive.js
 
 import { google } from 'googleapis';
-import fs from 'fs';
-import path from 'path';
 
-const KEYFILEPATH = path.join(process.cwd(), 'src/data-googleapis/storage-web-scraping-396800-96043ff114f4.json');
 const SCOPES = ['https://www.googleapis.com/auth/drive.readonly'];
 
+// Configuración del cliente de Google con las variables de entorno
 const auth = new google.auth.GoogleAuth({
-  keyFile: KEYFILEPATH,
+  credentials: {
+    type: 'service_account',
+    project_id: process.env.GOOGLE_PROJECT_ID,
+    private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+    private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    auth_uri: process.env.GOOGLE_AUTH_URI,
+    token_uri: process.env.GOOGLE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.GOOGLE_AUTH_PROVIDER_CERT_URL,
+    client_x509_cert_url: process.env.GOOGLE_CLIENT_CERT_URL,
+  },
   scopes: SCOPES,
 });
 
 const drive = google.drive({ version: 'v3', auth });
 
 async function listFilesInFolder(folderId) {
-  
   try {
     const res = await drive.files.list({
       q: `'${folderId}' in parents and mimeType='application/json'`,
       fields: 'files(id, name)',
     });
-    //      console.log("List of files:", res.data.files);
     return res.data.files;
   } catch (error) {
     console.error('Error listing files in folder:', error);
@@ -58,6 +65,5 @@ async function getFileContent(fileId) {
     throw error;
   }
 }
-
 
 export { listFilesInFolder, getFileContent };

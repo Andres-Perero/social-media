@@ -2,7 +2,7 @@
   background-color: rgba(44, 42, 42, 0.8);
   color: #eeebeb;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  padding: 70px;
+  padding: 100px;
   padding-bottom: 0;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,8 @@
   flex: 1;
   display: flex;
   justify-content: space-between;
-  margin-top: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .column {
@@ -31,7 +32,7 @@
 .socials {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   margin-right: 100px;
   position: relative;
 }
@@ -110,6 +111,7 @@
 .scheduleTable {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 1%;
 }
 
 .scheduleTable th,
@@ -136,7 +138,7 @@
 
 .anime,
 .contact {
-  width: 80%;
+  width: 90%;
   margin-bottom: 0;
   margin: 0;
   perspective: 1000px;

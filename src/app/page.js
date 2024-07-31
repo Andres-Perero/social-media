@@ -2,7 +2,9 @@
 
 import Head from "next/head";
 import styles from "./page.module.css";
-import data from "./data.json";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Loader from './Loader';
 import {
   InstagramIcon,
   OkruIcon,
@@ -13,7 +15,8 @@ import {
 } from "./icons";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import dataJsonRepo from "../data-googleapis/dataIdFolders.json";
+import { fetchJsonData } from "src/lib/getdataFetch";
 
 const iconComponents = {
   InstagramIcon,
@@ -25,11 +28,31 @@ const iconComponents = {
 };
 
 export default function Page() {
-  const { description, socials, schedule, animeImages, links } = data;
 
-  // Añadir el efecto de movimiento del mouse
+  const [jsonData, setJsonData] = useState(null);
+  const folderId = dataJsonRepo?.socialMedia_Folder;
+ const fileName = dataJsonRepo?.dataJsonUser
   useEffect(() => {
-    const elements = document.querySelectorAll(`.${styles.animeImage}, .${styles.contactImage}`);
+    const fetchData = async () => {
+      try {
+        if (folderId ) {
+          const data = await fetchJsonData(folderId, );
+          setJsonData(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, [folderId, fileName]);
+
+  useEffect(() => {
+    if (!jsonData) return;
+
+    const elements = document.querySelectorAll(
+      `.${styles.animeImage}, .${styles.contactImage}`
+    );
 
     const handleMouseMove = (event) => {
       const rect = event.currentTarget.getBoundingClientRect();
@@ -57,31 +80,51 @@ export default function Page() {
         element.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
-  }, []);
+  }, [jsonData]);
 
-  // Resaltar el día actual en el cronograma
   useEffect(() => {
-    const daysOfWeekInSpanish = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    if (!jsonData) return;
+
+    const daysOfWeekInSpanish = [
+      "Domingo",
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábado",
+    ];
     const today = new Date();
     const dayOfWeek = today.getDay();
-    const tableHeaderCells = document.querySelectorAll(`.${styles.scheduleTable} th`);
-    const tableBodyCells = document.querySelectorAll(`.${styles.scheduleTable} td`);
+    const tableHeaderCells = document.querySelectorAll(
+      `.${styles.scheduleTable} th`
+    );
+    const tableBodyCells = document.querySelectorAll(
+      `.${styles.scheduleTable} td`
+    );
 
-    // Resaltar en el encabezado
     tableHeaderCells.forEach((cell) => {
       if (cell.textContent === daysOfWeekInSpanish[dayOfWeek]) {
         cell.classList.add(styles.currentDay);
       }
     });
 
-    // Resaltar en el cuerpo de la tabla
     tableBodyCells.forEach((cell, index) => {
       const cellIndex = index % 7;
-      if (tableHeaderCells[cellIndex].textContent === daysOfWeekInSpanish[dayOfWeek]) {
+      if (
+        tableHeaderCells[cellIndex].textContent ===
+        daysOfWeekInSpanish[dayOfWeek]
+      ) {
         cell.classList.add(styles.currentDay);
       }
     });
-  }, []);
+  }, [jsonData]);
+
+  if (!jsonData) {
+    return <Loader />;
+  }
+
+  const { description, socials, schedule, animeImages, links } = jsonData;
 
   return (
     <div className={styles.container}>
@@ -103,7 +146,11 @@ export default function Page() {
             {socials.map((social) => {
               const IconComponent = iconComponents[social.icon];
               return (
-                <a key={social.name} href={social.link} data-tooltip={social.name}>
+                <a
+                  key={social.name}
+                  href={social.link}
+                  data-tooltip={social.name}
+                >
                   <IconComponent />
                 </a>
               );
@@ -126,7 +173,7 @@ export default function Page() {
                 </div>
               </section>
             </Link>
-            <Link href={links.battleSong}>
+            <Link href={links.battleSong} target="_blank">
               <section className={styles.contact}>
                 <h2>TORNEO DE OPENINGS</h2>
                 <div className={styles.contactImage}>
